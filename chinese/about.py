@@ -22,6 +22,7 @@ from ._version import __version__
 
 
 CSR_GITHUB_URL = 'https://github.com/Gustaf-C/anki-chinese-support-3'
+FORK_URL = 'https://github.com/leonbjorklund/anki-chinese-support-3'
 
 
 def showAbout():
@@ -30,26 +31,12 @@ def showAbout():
     label = QLabel()
     label.setStyleSheet('QLabel { font-size: 14px; }')
 
-    contributors = [
-        'Joseph Lorimer',
-        'Alex Griffin',
-        'Chris Hatch',
-        'Joe Minicucci',
-        'Roland Sieker',
-        'Thomas Tempé',
-    ]
-
     text = '''
 <div style="font-weight: bold">Chinese Support 3 v%s</div><br>
-<div><span style="font-weight: bold">
-    Maintainer</span>: Gustaf Carefall</div>
-<div><span style="font-weight: bold">Contributors</span>: %s</div>
-<div><span style="font-weight: bold">Website</span>: <a href="%s">%s</a></div>
-<div style="font-size: 12px">
-    <br>Based on the Chinese Support add-on by Thomas Tempé and many others.
-    <br>If your name is missing from here, please open an issue on GitHub.
-</div>
-''' % (__version__, ', '.join(contributors), CSR_GITHUB_URL, CSR_GITHUB_URL)
+<div><span style="font-weight: bold">Original</span>: <a href="%s">%s</a></div>
+<div><span style="font-weight: bold">Fork</span>: <a href="%s">%s</a></div>
+<div>Implements own TTS method for higher quality audio (requires Google Cloud TTS setup)</div>
+''' % (__version__, CSR_GITHUB_URL, CSR_GITHUB_URL, FORK_URL, FORK_URL)
 
     label.setText(text)
     label.setOpenExternalLinks(True)
