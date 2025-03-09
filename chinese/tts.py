@@ -31,6 +31,7 @@ class AudioDownloader:
             'google': self.get_google,
             'baidu': self.get_baidu,
             'aws': self.get_aws,
+            'gcloud': self.get_gcloud,
         }.get(self.service)
 
     def get_path(self):
@@ -59,6 +60,51 @@ class AudioDownloader:
             tts.save(self.path)
         except gTTSError as e:
             print('gTTS Error: {}'.format(e))
+
+    def get_gcloud(self):
+        try:
+            from google.cloud import texttospeech
+            import random
+            
+            client = texttospeech.TextToSpeechClient()
+            
+            voices = [
+                {"language_code": "cmn-CN", "name": "cmn-CN-Wavenet-A", "gender": texttospeech.SsmlVoiceGender.FEMALE},
+                {"language_code": "cmn-CN", "name": "cmn-CN-Wavenet-B", "gender": texttospeech.SsmlVoiceGender.MALE},
+                {"language_code": "cmn-CN", "name": "cmn-CN-Wavenet-C", "gender": texttospeech.SsmlVoiceGender.MALE},
+                {"language_code": "cmn-CN", "name": "cmn-CN-Wavenet-D", "gender": texttospeech.SsmlVoiceGender.FEMALE},
+                {"language_code": "cmn-TW", "name": "cmn-TW-Wavenet-A", "gender": texttospeech.SsmlVoiceGender.FEMALE},
+                {"language_code": "cmn-TW", "name": "cmn-TW-Wavenet-B", "gender": texttospeech.SsmlVoiceGender.MALE},
+                {"language_code": "cmn-TW", "name": "cmn-TW-Wavenet-C", "gender": texttospeech.SsmlVoiceGender.MALE},
+            ]
+            
+            selected_voice = random.choice(voices)
+            voice_name = selected_voice["name"]
+            language_code = selected_voice["language_code"]
+            
+            voice = texttospeech.VoiceSelectionParams(
+                language_code=language_code,
+                name=voice_name
+            )
+            
+            synthesis_input = texttospeech.SynthesisInput(text=self.text)
+            
+            audio_config = texttospeech.AudioConfig(
+                audio_encoding=texttospeech.AudioEncoding.MP3,
+                pitch=random.uniform(-2, 2),
+                speaking_rate=random.uniform(1.0, 1.10)
+            )
+            
+            response = client.synthesize_speech(
+                input=synthesis_input, 
+                voice=voice, 
+                audio_config=audio_config
+            )
+            
+            with open(self.path, "wb") as out:
+                out.write(response.audio_content)
+        except Exception as e:
+            print('Google Cloud TTS Error: {}'.format(e))
 
     def get_baidu(self):
         query = {
