@@ -23,7 +23,7 @@ requests.packages.urllib3.disable_warnings()
 
 
 class AudioDownloader:
-    def __init__(self, text, source='google|zh-CN'):
+    def __init__(self, text, source='gcloud|zh-CN'):
         self.text = text
         self.service, self.lang = source.split('|')
         self.path = self.get_path()
@@ -65,6 +65,9 @@ class AudioDownloader:
         try:
             from google.cloud import texttospeech
             import random
+            import os
+            
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\lubjse\Desktop\Repos\tts-key.json"
             
             client = texttospeech.TextToSpeechClient()
             
@@ -155,3 +158,4 @@ class AudioDownloader:
 
         with open(self.path, 'wb') as audio:
             audio.write(response.content)
+
